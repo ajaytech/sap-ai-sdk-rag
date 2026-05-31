@@ -1,0 +1,38 @@
+{
+  "name": "sap-ai-sdk-grounding-example",
+  "version": "1.0.0",
+  "description": "Document Grounding (RAG) example with data masking using SAP AI SDK and Groq API (OpenAI compatible)",
+  "type": "module",
+  "main": "start.ts",
+  "scripts": {
+    "demo": "tsx demo.ts",
+    "start": "tsx start.ts",
+    "start1": "tsx start_demo.ts",
+    "start2": "tsx sample01.ts",
+    "test:vector-store": "tsx vector-store.ts",
+    "build": "tsc --noEmit",
+    "clean": "rm -rf node_modules"
+  },
+  "keywords": [
+    "sap-ai-sdk",
+    "rag",
+    "grounding",
+    "data-masking",
+    "groq",
+    "vector-store",
+    "openai-compatible"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+     "@sap-ai-sdk/core": "^2.10.0",
+    "@sap-ai-sdk/foundation-models": "^2.10.0",
+    "@sap-cloud-sdk/connectivity": "^4.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "concurrently": "^8.2.2"
+  }
+}
