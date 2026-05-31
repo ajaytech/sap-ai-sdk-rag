@@ -1,18 +1,40 @@
-# Quick Start - Grounding Example
+# SAP AI SDK - RAG with Data Masking Example
+
+[![SAP AI SDK](https://img.shields.io/badge/SAP-AI%20SDK-blue)](https://github.com/SAP/sap-ai-sdk)
+[![Tutorial Video](https://img.shields.io/badge/YouTube-Tutorial-red)](https://www.youtube.com/watch?v=kz7gPoF9Shw&)
+
+This project demonstrates a Document Grounding (RAG) pipeline with built-in Data Masking using the SAP AI SDK and Groq API (OpenAI compatible).
+
+## 📺 Video Tutorial
+Watch the step-by-step tutorial on YouTube:
+
+[![Watch the video](https://img.youtube.com/vi/kz7gPoF9Shw/0.jpg)](https://www.youtube.com/watch?v=kz7gPoF9Shw&)
+
+[Watch Tutorial on YouTube](https://www.youtube.com/watch?v=kz7gPoF9Shw&)
+
+---
+
+## 🎓 Full Course: Learn AI Development for SAP Developers
+Accelerate your career by mastering AI development in the SAP ecosystem.
+
+[![AI Development Course](https://s3.amazonaws.com/thinkific-import/17035%2FN3oShrOSBi0FNVPjYYjq_AI%20Development%20Course%20Image.png)](https://www.ui5cn.com/courses/learn-ai-development-for-sap-developers?coupon=LEARNSAPAI99)
+
+[**Enroll in the Course Here (Special Discount Included)**](https://www.ui5cn.com/courses/learn-ai-development-for-sap-developers?coupon=LEARNSAPAI99)
+
+---
+
+## Quick Start
 
 Get the RAG pipeline running in **1 minute**! 🚀
 
-## Prerequisites
+### Prerequisites
 
 - Node.js 18+
-- Groq API key (free from https://console.groq.com/keys)
+- Groq API key (free from [https://console.groq.com/keys](https://console.groq.com/keys))
 
-## Step 1: Set API Key & Run
+### Step 1: Set API Key & Run
 
 ```bash
-# Navigate to grounding example
-cd sample-grounding
-
 # Set your Groq API key
 export GROQ_API_KEY="your-groq-api-key-here"
 
@@ -20,213 +42,44 @@ export GROQ_API_KEY="your-groq-api-key-here"
 npm install
 
 # Run demo
-npm run demo
+npm run start1
 ```
 
-**That's it!** No server needed - Groq API is OpenAI compatible!
+*(Note: `npm run start1` executes `start_demo.ts`)*
 
-## What You'll See
+## Features
 
-### Example Output
+- **Grounding (RAG)**: Connect your LLM to local documentation for accurate, context-aware answers.
+- **Data Masking**: Automatically identify and mask PII (Emails, Names, IDs) before sending data to the LLM.
+- **SAP AI SDK**: Built using the foundational capabilities of the SAP AI SDK.
+- **Groq Integration**: Leverages Groq's ultra-fast, OpenAI-compatible API.
 
-```
-╔═══════════════════════════════════════════════════════╗
-║   Grounding Pipeline with Data Masking - Demo        ║
-║   Using Groq API (OpenAI Compatible)                 ║
-╚═══════════════════════════════════════════════════════╝
+## Project Structure
 
-📝 Step 1: Process User Query
-─────────────────────────────────
-Original query: How should I install 2 RAM modules?
+- **`knowledge-base/`**: Contains the source documents (`courses.md`) used for grounding.
+- **`vector-store.ts`**: Simple vector-based retrieval logic.
+- **`data-masking-layer.ts`**: Logic for protecting sensitive data.
+- **`grounding-pipeline.ts`**: Orchestrates the flow between masking, retrieval, and the LLM.
+- **`start_demo.ts`**: The main entry point to see everything in action.
 
-🔍 Step 2: Search Knowledge Base
-─────────────────────────────────
-Retrieved 3 relevant chunks:
-   1. chunk_mb_9901_002 (score: 0.845)
-   2. chunk_mb_9901_001 (score: 0.723)
-   3. chunk_mb_9901_003 (score: 0.612)
+## Customizing the Knowledge Base
 
-🤖 Step 4: Query LLM (Groq API)
-─────────────────────────────────
-✓ LLM responded in 1,234ms
-
-📋 RESULT:
-Response: According to chunk_mb_9901_002, when installing exactly
-2 modules of RAM, they MUST be populated into slots A2 and B2 first...
-
-Citations: chunk_mb_9901_002, chunk_mb_9901_001
-```
-
-## 6 Examples Demonstrated
-
-1. **Basic Query** - Simple document search
-2. **Query with PII** - Automatic masking demo
-3. **Error Code** - Troubleshooting support
-4. **Support Contact** - With PII masking
-5. **Technical Query** - Complex questions
-6. **No Answer** - Out-of-scope handling
-
-## Try Your Own Query
-
-Create a file `test-query.ts`:
-
-```typescript
-import { join } from 'path';
-import { createVectorStore } from './vector-store.js';
-import { createGroundingPipeline } from './grounding-pipeline.js';
-
-const vectorStore = createVectorStore(
-  join(process.cwd(), 'knowledge-base', 'motherboard-docs.md')
-);
-
-const pipeline = createGroundingPipeline(vectorStore, {
-  url: 'https://api.groq.com/openai/v1',
-  headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}` }
-});
-
-const result = await pipeline.query('YOUR QUESTION HERE');
-
-console.log('Response:', result.response);
-console.log('Citations:', result.citations);
-```
-
-Run it:
-```bash
-tsx test-query.ts
-```
-
-## Test Individual Components
-
-### Test Vector Store Only
-
-```bash
-npm run test:vector-store
-```
-
-### Test Masking Only
-
-```bash
-cd ../custom-llm-wrapper
-npm run test:masking
-```
-
-## Common Issues
-
-### "GROQ_API_KEY environment variable is required"
-
-```bash
-# Check if set
-echo $GROQ_API_KEY
-
-# Set it
-export GROQ_API_KEY="your-key-here"
-
-# Get your key from
-# https://console.groq.com/keys
-```
-
-### "Failed to connect to Groq API"
-
-```bash
-# Check API key is valid
-curl https://api.groq.com/openai/v1/models \
-  -H "Authorization: Bearer $GROQ_API_KEY"
-
-# Should return list of models
-```
-
-### Cannot find module
-
-```bash
-# Make sure you're in the right directory
-pwd
-# Should show: .../sample-grounding
-
-# Install dependencies
-npm install
-
-# If still fails, go to parent and install everything
-cd ..
-pnpm install
-```
-
-## What's Next?
-
-### 1. Customize the Knowledge Base
-
-Edit `knowledge-base/motherboard-docs.md` or add new files:
+You can add or modify content in `knowledge-base/courses.md`. Use the following format for chunks:
 
 ```markdown
-## chunk_custom_001
-**Component:** Your Product
-**Category:** Your Category
+## chunk_id_001
+**Component:** Subject Name
+**Category:** Category Name
 **Content:**
-Your documentation here...
-```
-
-### 2. Try Different Questions
-
-```typescript
-await pipeline.query('Your custom question?');
-```
-
-### 3. Adjust Configuration
-
-```typescript
-const pipeline = createGroundingPipeline(vectorStore, destination, {
-  topK: 5,              // More chunks
-  temperature: 0.3,     // More focused
-  enableMasking: true   // Keep masking on
-});
-```
-
-### 4. Add Custom Masking Rules
-
-In `../custom-llm-wrapper/data-masking-layer.ts`:
-
-```typescript
-{
-  type: 'custom',
-  pattern: /YOUR-PATTERN/g,
-  maskWith: '[YOUR_TYPE]'
-}
-```
-
-## Quick Reference
-
-### File Locations
-
-- **Knowledge Base**: `knowledge-base/motherboard-docs.md`
-- **Vector Store**: `vector-store.ts`
-- **Pipeline**: `grounding-pipeline.ts`
-- **Demo**: `demo.ts`
-
-### Key Concepts
-
-- **Grounding**: Connect LLM to your documents
-- **RAG**: Retrieval Augmented Generation
-- **Masking**: Hide PII before LLM
-- **Citation**: Track which docs were used
-
-### Typical Flow
-
-```
-Query → Mask → Search → Context → LLM → Unmask → Response
+Your detailed documentation content here...
 ```
 
 ## Need Help?
 
-- Read full docs: [README.md](README.md)
-- Check main project: [../README.md](../README.md)
-- Groq docs: [https://console.groq.com/docs](https://console.groq.com/docs)
-
-## Why Groq?
-
-- ✅ **OpenAI Compatible** - No wrapper server needed!
-- ✅ **Ultra Fast** - 1-3 second responses
-- ✅ **Free Tier** - Great for testing
-- ✅ **Multiple Models** - Choose what fits your needs
+- [SAP AI SDK Documentation](https://github.com/SAP/sap-ai-sdk)
+- [Groq API Documentation](https://console.groq.com/docs)
+- [UI5CN Course Support](https://www.ui5cn.com)
 
 ---
 
-**That's it! You're now running RAG with data masking using Groq! 🚀**
+**Built with ❤️ for the SAP Developer Community.**
